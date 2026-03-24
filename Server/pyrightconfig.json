@@ -1,0 +1,8 @@
+{
+  "include": ["src"],
+  "exclude": ["**/__pycache__", "**/node_modules", "**/.git"],
+  "pythonVersion": "3.10",
+  "typeCheckingMode": "basic",
+  "reportMissingImports": true,
+  "reportMissingTypeStubs": false
+}

@@ -1,0 +1,12 @@
+.git/
+.gitignore
+*.md
+!README.md
+.vscode/
+.idea/
+*.meta
+Server/uv.lock
+htmlcov/
+.pytest_cache/
+.coverage
+__pycache__/

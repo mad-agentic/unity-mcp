@@ -1,0 +1,58 @@
+{
+  "manifest_version": "0.1",
+  "name": "Unity MCP",
+  "version": "0.1.0",
+  "description": "AI-powered Unity Editor automation via MCP - manage GameObjects, scripts, materials, scenes, prefabs, and more",
+  "author": {
+    "name": "mad.agent"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mad-agent/unity-mcp"
+  },
+  "homepage": "https://github.com/mad-agent/unity-mcp",
+  "documentation": "https://github.com/mad-agent/unity-mcp#readme",
+  "support": "https://github.com/mad-agent/unity-mcp/issues",
+  "server": {
+    "type": "python",
+    "entry_point": "Server/src/main.py",
+    "mcp_config": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/mad-agent/unity-mcp#subdirectory=Server",
+        "unity-mcp",
+        "--transport",
+        "stdio"
+      ],
+      "env": {}
+    }
+  },
+  "tools": [
+    {"name": "ping", "description": "Ping Unity to verify connectivity"},
+    {"name": "echo", "description": "Echo parameters back for testing"},
+    {"name": "manage_scene", "description": "Manage Unity scenes: list, load, save, create"},
+    {"name": "manage_gameobject", "description": "CRUD on GameObjects: create, delete, modify, transform"},
+    {"name": "find_gameobjects", "description": "Find GameObjects by name, tag, layer, path, component"},
+    {"name": "get_project_info", "description": "Get project info: scenes, tags, layers, assets"},
+    {"name": "manage_material", "description": "Create and modify materials: color, texture, shader properties"},
+    {"name": "manage_shader", "description": "Work with shaders: list, get properties, keywords"},
+    {"name": "manage_texture", "description": "Create and modify textures with patterns and gradients"},
+    {"name": "manage_asset", "description": "CRUD on assets: create, rename, delete, move, copy, find"},
+    {"name": "manage_script", "description": "Create and modify C# scripts: create, rename, delete"},
+    {"name": "manage_components", "description": "Add, remove, and configure GameObject components"},
+    {"name": "create_script", "description": "Create C# scripts from templates with method stubs"},
+    {"name": "script_apply_edits", "description": "Apply code edits to C# scripts: replace, insert, add using"},
+    {"name": "validate_script", "description": "Validate C# script syntax and compilation"},
+    {"name": "manage_editor", "description": "Control Unity Editor: play, pause, stop, selection, focus"},
+    {"name": "refresh_unity", "description": "Refresh Unity asset database and recompile scripts"},
+    {"name": "execute_menu_item", "description": "Execute Unity Editor menu items by path"},
+    {"name": "read_console", "description": "Read Unity Editor console: logs, warnings, errors"},
+    {"name": "manage_prefabs", "description": "Create, instantiate, unpack, apply, and revert prefabs"},
+    {"name": "manage_ui", "description": "Manage UI Toolkit: UXML, USS, UIDocument components"},
+    {"name": "manage_vfx", "description": "Manage VFX and particle systems"},
+    {"name": "manage_animation", "description": "Manage animations: controllers, states, transitions, clips"},
+    {"name": "manage_camera", "description": "Manage cameras: create, set properties, Cinemachine"},
+    {"name": "manage_packages", "description": "Install, remove, and manage Unity packages"}
+  ]
+}

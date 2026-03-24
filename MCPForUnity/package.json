@@ -1,0 +1,25 @@
+{
+  "name": "com.madagent.unity-mcp",
+  "version": "0.1.0",
+  "displayName": "Unity MCP",
+  "description": "A bridge that connects AI assistants to Unity via the MCP (Model Context Protocol). Allows AI clients like Claude Code, Cursor, and VSCode to directly control your Unity Editor for enhanced development workflows.",
+  "unity": "2021.3",
+  "documentationUrl": "https://github.com/mad-agent/unity-mcp",
+  "licensesUrl": "https://github.com/mad-agent/unity-mcp/blob/main/LICENSE",
+  "dependencies": {
+    "com.unity.nuget.newtonsoft-json": "3.0.2",
+    "com.unity.test-framework": "1.1.31"
+  },
+  "keywords": [
+    "unity",
+    "ai",
+    "llm",
+    "mcp",
+    "model-context-protocol",
+    "mcp-server",
+    "mcp-client"
+  ],
+  "author": {
+    "name": "mad.agent"
+  }
+}

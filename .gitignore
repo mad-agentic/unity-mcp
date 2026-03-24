@@ -1,0 +1,46 @@
+# Unity
+Library/
+Temp/
+Obj/
+Build/
+Builds/
+Logs/
+*.log
+*.pid
+~*
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+*.egg
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+dmypy.json
+.uv/
+
+# Unity MCP
+Server/.uv/
+Server/uv.lock
+
+# IDE
+.DS_Store
+Thumbs.db
+.vs/
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+
+# OS
+*.lnk
+desktop.ini
+
+# Unity .meta changes (for reference)
+*.meta.bak
+.claude/settings.local.json
+.claude/settings.json
