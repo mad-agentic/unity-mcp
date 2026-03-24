@@ -20,8 +20,8 @@ namespace MadAgent.UnityMCP.Editor.Tools
     /// UI Toolkit (UXML/USS) management tool supporting create_uxml, create_uss, attach_to_document,
     /// get_elements, and set_style operations.
     /// </summary>
-    [McpForUnityTool("manage_ui", Group = "ui",
-        Description = "Create and manage Unity UI Toolkit (UXML/USS): create templates, stylesheets, attach elements, get and style UI elements.")]
+    [McpForUnityTool("manage_ui", group = "ui",
+        description = "Create and manage Unity UI Toolkit (UXML/USS): create templates, stylesheets, attach elements, get and style UI elements.")]
     public static class ManageUI
     {
         public static object HandleCommand(JObject @params)

@@ -14,8 +14,8 @@ namespace MadAgent.UnityMCP.Editor.Tools
     /// <summary>
     /// Tool for managing Unity C# scripts: create, get, rename, delete, and introspect.
     /// </summary>
-    [McpForUnityTool("manage_script", Group = "core",
-        Description = "Manage Unity C# scripts: create, get, rename, delete, and introspect methods/properties.")]
+    [McpForUnityTool("manage_script", group = "core",
+        description = "Manage Unity C# scripts: create, get, rename, delete, and introspect methods/properties.")]
     public static class ManageScript
     {
         private const string DEFAULT_SCRIPTS_FOLDER = "Assets/Scripts";
@@ -91,7 +91,7 @@ namespace MadAgent.UnityMCP.Editor.Tools
                 file_name = fileName,
                 file_path = filePath,
                 template = template,
-                namespace = ns,
+                @namespace = ns,
             });
         }
 
@@ -113,7 +113,7 @@ namespace MadAgent.UnityMCP.Editor.Tools
                 script_path = scriptPath,
                 full_path = fullPath,
                 class_name = className,
-                namespace = ns,
+                @namespace = ns,
                 template = template,
                 line_count = content.Split('\n').Length,
                 byte_size = content.Length,

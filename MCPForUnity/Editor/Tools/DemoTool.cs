@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using MadAgent.UnityMCP.Editor;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
+using UnityEditor;
 
 namespace MadAgent.UnityMCP.Editor.Tools
 {
@@ -9,7 +10,7 @@ namespace MadAgent.UnityMCP.Editor.Tools
     /// Demo tool — returns Unity environment info.
     /// This serves as a reference implementation for all MCP tools.
     /// </summary>
-    [McpForUnityTool("ping", Group = "core", Description = "Ping Unity to verify connectivity and get environment info.")]
+    [McpForUnityTool("ping", group = "core", description = "Ping Unity to verify connectivity and get environment info.")]
     public static class Ping
     {
         public static object HandleCommand(JObject @params)
@@ -29,7 +30,7 @@ namespace MadAgent.UnityMCP.Editor.Tools
     /// Echo tool — echoes back the parameters received.
     /// Useful for testing and debugging.
     /// </summary>
-    [McpForUnityTool("echo", Group = "core", Description = "Echo back the received parameters. Useful for testing connectivity.")]
+    [McpForUnityTool("echo", group = "core", description = "Echo back the received parameters. Useful for testing connectivity.")]
     public static class Echo
     {
         public static object HandleCommand(JObject @params)
@@ -47,7 +48,7 @@ namespace MadAgent.UnityMCP.Editor.Tools
     /// <summary>
     /// Get environment info about the current Unity project.
     /// </summary>
-    [McpForUnityTool("get_environment", Group = "core", Description = "Get information about the current Unity environment, project, and editor state.")]
+    [McpForUnityTool("get_environment", group = "core", description = "Get information about the current Unity environment, project, and editor state.")]
     public static class GetEnvironment
     {
         public static object HandleCommand(JObject @params)
@@ -64,7 +65,7 @@ namespace MadAgent.UnityMCP.Editor.Tools
                     platform = Application.platform.ToString(),
                     install_path = Application.installMode.ToString(),
                     is_playing = Application.isPlaying,
-                    is_paused = Application.isPaused,
+                    is_paused = EditorApplication.isPaused,
                 },
                 scenes = new
                 {

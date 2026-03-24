@@ -11,8 +11,8 @@ namespace MadAgent.UnityMCP.Editor.Tools
     /// Camera management tool supporting list, get, create, set_transform, set_background,
     /// add_component, and set_orthographic operations.
     /// </summary>
-    [McpForUnityTool("manage_camera", Group = "core",
-        Description = "Manage Unity cameras: list, get, create, set transform, set background color, add components, and configure orthographic mode.")]
+    [McpForUnityTool("manage_camera", group = "core",
+        description = "Manage Unity cameras: list, get, create, set transform, set background color, add components, and configure orthographic mode.")]
     public static class ManageCamera
     {
         public static object HandleCommand(JObject @params)
@@ -138,7 +138,7 @@ namespace MadAgent.UnityMCP.Editor.Tools
                 Camera existingMain = null;
                 if (cameraName == "Main Camera")
                 {
-                    var allCameras = Object.FindObjectsOfType<Camera>();
+                    var allCameras = UnityEngine.Object.FindObjectsOfType<Camera>();
                     foreach (var c in allCameras)
                     {
                         if (c.tag == "MainCamera")

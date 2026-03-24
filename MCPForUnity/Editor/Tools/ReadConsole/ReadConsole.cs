@@ -11,8 +11,8 @@ namespace MadAgent.UnityMCP.Editor.Tools
     /// Console log reader supporting read, clear, get_errors, get_warnings, and get_logs.
     /// Uses UnityEditor.LogEntries and UnityEditor.Debug for console access.
     /// </summary>
-    [McpForUnityTool("read_console", Group = "core",
-        Description = "Read, clear, and filter Unity console output: errors, warnings, logs. Useful for debugging and CI.")]
+    [McpForUnityTool("read_console", group = "core",
+        description = "Read, clear, and filter Unity console output: errors, warnings, logs. Useful for debugging and CI.")]
     public static class ReadConsole
     {
         private const int DefaultCount = 100;

@@ -14,8 +14,8 @@ namespace MadAgent.UnityMCP.Editor.Tools
     /// Tool for creating Unity C# scripts with templates and method stubs.
     /// More focused than ManageScript for script creation scenarios.
     /// </summary>
-    [McpForUnityTool("create_script", Group = "core",
-        Description = "Create Unity C# scripts from templates or from scratch, with optional method stubs.")]
+    [McpForUnityTool("create_script", group = "core",
+        description = "Create Unity C# scripts from templates or from scratch, with optional method stubs.")]
     public static class CreateScript
     {
         private const string DEFAULT_SCRIPTS_FOLDER = "Assets/Scripts";
@@ -123,7 +123,7 @@ namespace MadAgent.UnityMCP.Editor.Tools
                 file_name = fileName,
                 file_path = filePath,
                 template = template,
-                namespace = ns,
+                @namespace = ns,
                 method_count = methodStubs?.Count ?? 0,
             });
         }

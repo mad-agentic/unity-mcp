@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using MadAgent.UnityMCP.Editor;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
+using UnityEditor;
 
 namespace MadAgent.UnityMCP.Editor.Tools
 {
@@ -10,8 +11,8 @@ namespace MadAgent.UnityMCP.Editor.Tools
     /// Menu item execution tool supporting execute, get_recent, and search actions.
     /// Uses UnityEditor.Menu to execute menu items and search menu paths.
     /// </summary>
-    [McpForUnityTool("execute_menu_item", Group = "core",
-        Description = "Execute Unity menu items by path, get recent items, and search menu paths.")]
+    [McpForUnityTool("execute_menu_item", group = "core",
+        description = "Execute Unity menu items by path, get recent items, and search menu paths.")]
     public static class ExecuteMenuItem
     {
         private static readonly List<string> _recentMenuItems = new List<string>();
@@ -54,15 +55,13 @@ namespace MadAgent.UnityMCP.Editor.Tools
 
             try
             {
-                // Validate menu item exists before executing
-                if (!IsValidMenuItem(menuPath))
+                var executed = EditorApplication.ExecuteMenuItem(menuPath);
+                if (!executed)
                 {
                     return new ErrorResponse("MenuItemNotFound",
-                        $"Menu item '{menuPath}' not found. "
+                        $"Menu item '{menuPath}' not found or not executable. "
                         + "Check the path format: use '/' separators (e.g. 'File/Save', 'GameObject/Create Empty').");
                 }
-
-                UnityEditor.Menu.ExecuteFunction(menuPath);
 
                 // Track recent item
                 AddRecentItem(menuPath);
@@ -111,9 +110,14 @@ namespace MadAgent.UnityMCP.Editor.Tools
         {
             try
             {
-                // Check if the menu path resolves to a valid item
-                var menu = UnityEditor.Menu.GetMenuItem(menuPath, false);
-                return menu != null && menu.IsValid();
+                var submenus = Unsupported.GetSubmenus("");
+                if (submenus == null) return false;
+                foreach (var submenu in submenus)
+                {
+                    if (string.Equals(submenu, menuPath, StringComparison.OrdinalIgnoreCase))
+                        return true;
+                }
+                return false;
             }
             catch
             {

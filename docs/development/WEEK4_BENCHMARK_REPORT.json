@@ -1,0 +1,28 @@
+{
+  "generated_at": 1774348182,
+  "kpi": {
+    "setup_time_seconds": 5.063,
+    "doctor_time_seconds": 2.318,
+    "regression_time_seconds": 3.566,
+    "success_rate": 1.0
+  },
+  "commands": {
+    "bootstrap": {
+      "exit_code": 0,
+      "duration_seconds": 5.063
+    },
+    "doctor": {
+      "exit_code": 0,
+      "duration_seconds": 2.318
+    },
+    "regression": {
+      "exit_code": 0,
+      "duration_seconds": 3.566
+    }
+  },
+  "notes": {
+    "bootstrap_excerpt": "{\n  \"phase\": \"bootstrap\",\n  \"client\": {\n    \"id\": \"vscode-copilot\"\n  },\n  \"environment\": {\n    \"platform\": \"Windows\",\n    \"python_version\": \"3.12.4\",\n    \"python_supported\": true,\n    \"uv_installed\": true,\n    \"uv_path\": \"C:\\\\Users\\\\admin\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\Scripts\\\\uv.EXE\"\n  },\n  \"server\": {\n    \"mcp_endpoint\": \"http://127.0.0.1:8080/mcp\",\n    \"health_checked\": true,\n    \"health\": {\n      \"status\": \"unreachable\",\n      \"error\": \"All connection attempts failed\"\n    }\n  },\n  \"config\": {\n    \"mcpServers\": {\n      \"unityMCP\": {\n        \"url\": \"http://127.0.0.1:8080/mcp\"\n      }\n    }\n  },\n  \"next_actions\": [\n    \"Run uv sync inside Server if dependencies are missing.\",\n    \"Start Unity bridge from Window > Unity MCP.\",\n    \"Paste generated MCP config into your client and reconnect once.\"\n  ],\n  \"meta\": {\n    \"duration_ms\": 65.35\n  }\n}\n",
+    "doctor_excerpt": "{\n  \"python_version\": \"3.12.4\",\n  \"python_supported\": true,\n  \"platform\": \"Windows\",\n  \"client\": {\n    \"id\": \"vscode-copilot\",\n    \"label\": \"VS Code Copilot\"\n  },\n  \"server\": {\n    \"url\": \"http://127.0.0.1:8080/mcp\",\n    \"health_checked\": false,\n    \"transport\": null,\n    \"unity_connected\": null\n  },\n  \"next_steps\": [\n    \"Open Unity and start the bridge from Window > Unity MCP.\",\n    \"Paste the generated MCP config into your client settings.\",\n    \"If the client does not discover tools, restart the MCP client once.\"\n  ]\n}\n\n{\n  \"mcpServers\": {\n    \"unityMCP\": {\n      \"url\": \"http://127.0.0.1:8080/mcp\"\n    }\n  }\n}\n",
+    "regression_excerpt": "============================= test session starts =============================\nplatform win32 -- Python 3.12.4, pytest-9.0.2, pluggy-1.6.0 -- C:\\Users\\admin\\AppData\\Local\\uv\\cache\\builds-v0\\.tmpGniy2j\\Scripts\\python.exe\ncachedir: .pytest_cache\nrootdir: C:\\Users\\admin\\Desktop\\_MyProjects\\unity-mcp\\Server\nconfigfile: pyproject.toml\nplugins: anyio-4.12.1\ncollecting ... collected 53 items\n\ntests/test_core.py::TestConstants::test_default_transport PASSED         [  1%]\ntests/test_core.py::TestConstants::test_default_http_host PASSED         [  3%]\ntests/test_core.py::TestConstants::test_default_http_port PASSED         [  5%]\ntests/test_core.py::TestConstants::test_tool_group_core_defined PASSED   [  7%]\ntests/test_core.py::TestConstants::test_all_tool_groups PASSED           [  9%]\ntests/test_core.py::TestConstants::test_default_tool_maturity PASSED     [ 11%]\ntests/test_core.py::TestConstants::test_all_tool_maturity_levels PASSED  [ 13%]\ntests/test_core.py::TestConfig::test_default_confi"
+  }
+}

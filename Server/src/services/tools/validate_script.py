@@ -7,7 +7,7 @@ from typing import Annotated, Any, Literal, Optional
 from fastmcp import Context
 
 from services.registry import mcp_for_unity_tool
-from transport.unity_transport import send_with_unity_instance
+from services.tools.utils import execute_tool_with_contract
 
 
 @mcp_for_unity_tool(
@@ -45,5 +45,4 @@ async def validate_script(
     if full_check is not None:
         params["full_check"] = full_check
 
-    result = await send_with_unity_instance(None, "validate_script", params)
-    return result
+    return await execute_tool_with_contract("validate_script", params)

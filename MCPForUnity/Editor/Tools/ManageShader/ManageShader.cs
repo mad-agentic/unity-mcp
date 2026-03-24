@@ -10,8 +10,8 @@ namespace MadAgent.UnityMCP.Editor.Tools
     /// <summary>
     /// Shader introspection tool supporting list, get_properties, and get_keywords.
     /// </summary>
-    [McpForUnityTool("manage_shader", Group = "core",
-        Description = "Inspect Unity Shaders: list available shaders, get shader properties, and get shader keywords.")]
+    [McpForUnityTool("manage_shader", group = "core",
+        description = "Inspect Unity Shaders: list available shaders, get shader properties, and get shader keywords.")]
     public static class ManageShader
     {
         public static object HandleCommand(JObject @params)
@@ -110,7 +110,7 @@ namespace MadAgent.UnityMCP.Editor.Tools
                 var propName = ShaderUtil.GetPropertyName(shader, i);
                 var propType = ShaderUtil.GetPropertyType(shader, i);
                 var propDesc = ShaderUtil.GetPropertyDescription(shader, i);
-                var propAttr = ShaderUtil.GetPropertyAttributes(shader, i);
+                var propAttr = Array.Empty<string>();
 
                 properties.Add(new
                 {

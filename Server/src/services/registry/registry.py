@@ -5,10 +5,19 @@ from __future__ import annotations
 import importlib
 import logging
 import pkgutil
+import warnings
 from pathlib import Path
 from typing import Any, Callable, Optional
 
-from core.constants import TOOL_GROUP_CORE, ALL_TOOL_GROUPS
+# Suppress websockets deprecation warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning, module="websockets")
+
+from core.constants import (
+    TOOL_GROUP_CORE,
+    ALL_TOOL_GROUPS,
+    DEFAULT_TOOL_MATURITY,
+    ALL_TOOL_MATURITY_LEVELS,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -23,6 +32,7 @@ def mcp_for_unity_tool(
     *,
     description: str,
     group: str = TOOL_GROUP_CORE,
+    maturity: str = DEFAULT_TOOL_MATURITY,
     annotations: Optional[dict[str, Any]] = None,
 ) -> Callable:
     """Decorator to register an MCP tool.
@@ -30,18 +40,23 @@ def mcp_for_unity_tool(
     Args:
         description: Human-readable description of the tool
         group: Tool group (core, vfx, animation, ui, etc.)
+        maturity: Tool maturity level (core, advanced, experimental)
         annotations: MCP tool annotations (title, destructiveHint, etc.)
     """
     def decorator(func: Callable) -> Callable:
         tool_name = func.__name__
+        normalized_maturity = maturity if maturity in ALL_TOOL_MATURITY_LEVELS else DEFAULT_TOOL_MATURITY
         _registered_tools[tool_name] = {
             "name": tool_name,
             "description": description,
             "group": group,
+            "maturity": normalized_maturity,
             "annotations": annotations or {},
             "func": func,
         }
-        logger.debug(f"Registered tool: {tool_name} (group={group})")
+        logger.debug(
+            f"Registered tool: {tool_name} (group={group}, maturity={normalized_maturity})"
+        )
         return func
     return decorator
 
@@ -99,6 +114,26 @@ def get_enabled_tools() -> dict[str, dict[str, Any]]:
     }
 
 
+def get_tool_taxonomy() -> dict[str, Any]:
+    """Get current tool taxonomy snapshot grouped by group and maturity."""
+    by_group: dict[str, list[str]] = {}
+    by_maturity: dict[str, list[str]] = {}
+
+    for name, tool in _registered_tools.items():
+        group = tool.get("group", TOOL_GROUP_CORE)
+        maturity = tool.get("maturity", DEFAULT_TOOL_MATURITY)
+
+        by_group.setdefault(group, []).append(name)
+        by_maturity.setdefault(maturity, []).append(name)
+
+    return {
+        "total_tools": len(_registered_tools),
+        "enabled_groups": sorted(_enabled_groups),
+        "by_group": {k: sorted(v) for k, v in sorted(by_group.items())},
+        "by_maturity": {k: sorted(v) for k, v in sorted(by_maturity.items())},
+    }
+
+
 def get_resource(name: str) -> Optional[dict[str, Any]]:
     """Get a registered resource by name."""
     return _registered_resources.get(name)
@@ -111,7 +146,7 @@ def get_all_resources() -> dict[str, dict[str, Any]]:
 
 def get_all_groups() -> set[str]:
     """Get all known tool groups."""
-    groups = set(TOOL_GROUP_CORE)
+    groups = {TOOL_GROUP_CORE}
     for tool in _registered_tools.values():
         groups.add(tool["group"])
     return groups

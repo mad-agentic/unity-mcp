@@ -10,8 +10,8 @@ namespace MadAgent.UnityMCP.Editor.Tools
     /// <summary>
     /// Asset management tool supporting create, get, rename, delete, move, copy, find, and get_metadata.
     /// </summary>
-    [McpForUnityTool("manage_asset", Group = "core",
-        Description = "Manage Unity Assets: create, get, rename, delete, move, copy, find, and get metadata for project assets.")]
+    [McpForUnityTool("manage_asset", group = "core",
+        description = "Manage Unity Assets: create, get, rename, delete, move, copy, find, and get metadata for project assets.")]
     public static class ManageAsset
     {
         public static object HandleCommand(JObject @params)
@@ -91,7 +91,7 @@ namespace MadAgent.UnityMCP.Editor.Tools
             asset.name = System.IO.Path.GetFileNameWithoutExtension(name);
 
             var fullPath = targetPath + name;
-            var created = AssetDatabase.CreateAsset(asset, fullPath);
+            AssetDatabase.CreateAsset(asset, fullPath);
 
             return new SuccessResponse($"Asset '{name}' created at '{fullPath}'.", new
             {
@@ -168,10 +168,10 @@ namespace MadAgent.UnityMCP.Editor.Tools
                 return new ErrorResponse("AssetNotFound", $"Asset not found at path: {assetPath}");
 
             var name = AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(assetPath).name;
-            var result = AssetDatabase.DeleteAsset(assetPath);
+            var deleted = AssetDatabase.DeleteAsset(assetPath);
 
-            if (!string.IsNullOrEmpty(result))
-                return new ErrorResponse("DeleteFailed", result);
+            if (!deleted)
+                return new ErrorResponse("DeleteFailed", $"Failed to delete asset at path: {assetPath}");
 
             return new SuccessResponse($"Asset '{name}' deleted.", new
             {

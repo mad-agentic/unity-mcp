@@ -44,3 +44,7 @@ desktop.ini
 *.meta.bak
 .claude/settings.local.json
 .claude/settings.json
+/TestProjects
+/.claude/agents
+/_Ref
+/.github

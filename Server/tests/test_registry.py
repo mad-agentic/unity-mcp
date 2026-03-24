@@ -7,6 +7,7 @@ from services.registry import (
     mcp_for_unity_resource,
     get_tool,
     get_all_tools,
+    get_tool_taxonomy,
     get_enabled_groups,
     enable_group,
     disable_group,
@@ -49,6 +50,32 @@ class TestToolRegistration:
         assert tool["group"] == "vfx"
         assert tool["annotations"]["destructiveHint"] is True
 
+    def test_register_tool_with_maturity(self):
+        @mcp_for_unity_tool(
+            description="Tool with maturity",
+            group="core",
+            maturity="advanced",
+        )
+        async def maturity_tool(ctx):
+            return {}
+
+        tool = get_tool("maturity_tool")
+        assert tool is not None
+        assert tool["maturity"] == "advanced"
+
+    def test_register_tool_with_invalid_maturity_falls_back(self):
+        @mcp_for_unity_tool(
+            description="Tool with invalid maturity",
+            group="core",
+            maturity="unknown_level",
+        )
+        async def invalid_maturity_tool(ctx):
+            return {}
+
+        tool = get_tool("invalid_maturity_tool")
+        assert tool is not None
+        assert tool["maturity"] == "core"
+
     def test_get_all_tools(self):
         @mcp_for_unity_tool(description="Tool 1", group="core")
         async def tool1(ctx): return {}
@@ -61,6 +88,22 @@ class TestToolRegistration:
 
     def test_get_nonexistent_tool(self):
         assert get_tool("nonexistent") is None
+
+    def test_get_tool_taxonomy(self):
+        @mcp_for_unity_tool(description="Tool A", group="core", maturity="core")
+        async def tool_a(ctx):
+            return {}
+
+        @mcp_for_unity_tool(description="Tool B", group="vfx", maturity="experimental")
+        async def tool_b(ctx):
+            return {}
+
+        taxonomy = get_tool_taxonomy()
+        assert taxonomy["total_tools"] == 2
+        assert taxonomy["by_group"]["core"] == ["tool_a"]
+        assert taxonomy["by_group"]["vfx"] == ["tool_b"]
+        assert taxonomy["by_maturity"]["core"] == ["tool_a"]
+        assert taxonomy["by_maturity"]["experimental"] == ["tool_b"]
 
 
 class TestGroupManagement:

@@ -5,6 +5,7 @@ using Newtonsoft.Json.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 
 namespace MadAgent.UnityMCP.Editor.Tools
 {
@@ -12,8 +13,8 @@ namespace MadAgent.UnityMCP.Editor.Tools
     /// Full scene management tool supporting list, get_current, save, save_all,
     /// load, create, create_with_objects, add_to_build, and remove_from_build.
     /// </summary>
-    [McpForUnityTool("manage_scene", Group = "core",
-        Description = "Manage Unity scenes: list, get current, save, save all, load, create, create with GameObjects, add to build, remove from build.")]
+    [McpForUnityTool("manage_scene", group = "core",
+        description = "Manage Unity scenes: list, get current, save, save all, load, create, create with GameObjects, add to build, remove from build.")]
     public static class ManageScene
     {
         public static object HandleCommand(JObject @params)

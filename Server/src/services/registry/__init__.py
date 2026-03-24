@@ -5,6 +5,7 @@ from services.registry.registry import (
     get_tool,
     get_all_tools,
     get_tools_for_group,
+    get_tool_taxonomy,
     get_enabled_tools,
     get_resource,
     get_all_resources,

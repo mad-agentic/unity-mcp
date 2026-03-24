@@ -7,7 +7,7 @@ from typing import Annotated, Any, Literal, Optional
 from fastmcp import Context
 
 from services.registry import mcp_for_unity_tool
-from transport.unity_transport import send_with_unity_instance
+from services.tools.utils import execute_tool_with_contract
 
 
 @mcp_for_unity_tool(
@@ -42,5 +42,4 @@ async def refresh_unity(
     if path is not None:
         params["path"] = path
 
-    result = await send_with_unity_instance(None, "refresh_unity", params)
-    return result
+    return await execute_tool_with_contract("refresh_unity", params)

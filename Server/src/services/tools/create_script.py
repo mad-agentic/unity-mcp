@@ -7,7 +7,7 @@ from typing import Annotated, Any, Literal, Optional
 from fastmcp import Context
 
 from services.registry import mcp_for_unity_tool
-from transport.unity_transport import send_with_unity_instance
+from services.tools.utils import execute_tool_with_contract
 
 
 @mcp_for_unity_tool(
@@ -71,5 +71,4 @@ async def create_script(
     if output_path is not None:
         params["output_path"] = output_path
 
-    result = await send_with_unity_instance(None, "create_script", params)
-    return result
+    return await execute_tool_with_contract("create_script", params)

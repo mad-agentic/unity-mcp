@@ -12,8 +12,8 @@ namespace MadAgent.UnityMCP.Editor.Tools
     /// Animation management tool supporting create_controller, add_state, add_transition,
     /// set_keyframe, and create_clip operations.
     /// </summary>
-    [McpForUnityTool("manage_animation", Group = "animation",
-        Description = "Manage Unity Animator controllers, animation clips, states, transitions, and keyframes.")]
+    [McpForUnityTool("manage_animation", group = "animation",
+        description = "Manage Unity Animator controllers, animation clips, states, transitions, and keyframes.")]
     public static class ManageAnimation
     {
         public static object HandleCommand(JObject @params)
@@ -69,7 +69,7 @@ namespace MadAgent.UnityMCP.Editor.Tools
 
             try
             {
-                var controller = UnityEditor.Animations.AnimatorController.CreateRuntimeAnimatorController(fullPath);
+                var controller = UnityEditor.Animations.AnimatorController.CreateAnimatorControllerAtPath(fullPath);
 
                 if (controller == null)
                 {
@@ -80,9 +80,6 @@ namespace MadAgent.UnityMCP.Editor.Tools
                 // Add a default empty state
                 var defaultState = controller.layers[0].stateMachine.AddState("Entry");
                 controller.layers[0].stateMachine.defaultState = defaultState;
-
-                // Save the asset
-                AssetDatabase.CreateAsset(controller, fullPath);
 
                 return new SuccessResponse($"Animator Controller created at '{fullPath}'.", new
                 {
@@ -104,7 +101,7 @@ namespace MadAgent.UnityMCP.Editor.Tools
             var controllerPath = p.RequireString("controller_path");
             var stateName = p.RequireString("state_name");
             var clipPath = p.GetString("clip_path");
-            var speed = p.GetFloat("speed", 1.0f);
+            var speed = p.GetFloat("speed", 1.0f) ?? 1.0f;
 
             var controller = AssetDatabase.LoadAssetAtPath<UnityEditor.Animations.AnimatorController>(controllerPath);
             if (controller == null)
@@ -171,7 +168,7 @@ namespace MadAgent.UnityMCP.Editor.Tools
             var fromState = p.RequireString("from_state");
             var toState = p.RequireString("to_state");
             var hasExitTime = p.GetBool("has_exit_time", false);
-            var transitionDuration = p.GetFloat("transition_duration", 0.25f);
+            var transitionDuration = p.GetFloat("transition_duration", 0.25f) ?? 0.25f;
 
             var controller = AssetDatabase.LoadAssetAtPath<UnityEditor.Animations.AnimatorController>(controllerPath);
             if (controller == null)
@@ -263,13 +260,11 @@ namespace MadAgent.UnityMCP.Editor.Tools
                 // Record the animation for undo
                 Undo.RecordObject(clip, "Set Keyframe");
 
-                // Find the property curve
-                var binding = UnityEditor.AnimationUtility.GetCurveBinders(clip)
-                    .Find(b => b.propertyName == propertyPath);
+                var curvePath = AnimationUtility.CalculateTransformPath(go.transform, null);
 
                 // Get existing curve or create new one
                 var curve = AnimationUtility.GetEditorCurve(clip, EditorCurveBinding.FloatCurve(
-                    go, typeof(Transform), propertyPath));
+                    curvePath, typeof(Transform), propertyPath));
 
                 if (curve == null)
                 {
@@ -282,7 +277,7 @@ namespace MadAgent.UnityMCP.Editor.Tools
 
                 // Sort the curve by time
                 AnimationUtility.SetEditorCurve(clip, EditorCurveBinding.FloatCurve(
-                    go, typeof(Transform), propertyPath), curve);
+                    curvePath, typeof(Transform), propertyPath), curve);
 
                 EditorUtility.SetDirty(clip);
 

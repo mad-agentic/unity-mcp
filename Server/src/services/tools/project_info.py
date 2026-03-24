@@ -7,7 +7,7 @@ from typing import Annotated, Any, Optional
 from fastmcp import Context
 
 from services.registry import mcp_for_unity_tool
-from transport.unity_transport import send_with_unity_instance
+from services.tools.utils import execute_tool_with_contract
 
 
 @mcp_for_unity_tool(
@@ -65,5 +65,4 @@ async def get_project_info(
     if cursor is not None:
         params["cursor"] = cursor
 
-    result = await send_with_unity_instance(None, "get_project_info", params)
-    return result
+    return await execute_tool_with_contract("get_project_info", params)

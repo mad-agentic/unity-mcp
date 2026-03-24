@@ -19,17 +19,35 @@ namespace MadAgent.UnityMCP.Editor
         /// The tool group. Only "core" is enabled by default.
         /// Others (vfx, animation, ui, scripting_ext, testing, probuilder) start disabled.
         /// </summary>
-        public string Group { get; }
+        public string Group { get; set; }
 
         /// <summary>
         /// Whether to auto-register this tool. Set to false for manual registration.
         /// </summary>
-        public bool AutoRegister { get; }
+        public bool AutoRegister { get; set; }
 
         /// <summary>
         /// Description shown to the AI client.
         /// </summary>
-        public string Description { get; }
+        public string Description { get; set; }
+
+        public string group
+        {
+            get => Group;
+            set => Group = value;
+        }
+
+        public bool autoRegister
+        {
+            get => AutoRegister;
+            set => AutoRegister = value;
+        }
+
+        public string description
+        {
+            get => Description;
+            set => Description = value;
+        }
 
         public McpForUnityToolAttribute(
             string name = null,

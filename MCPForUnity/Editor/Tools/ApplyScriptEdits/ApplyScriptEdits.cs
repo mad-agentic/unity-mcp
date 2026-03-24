@@ -14,8 +14,8 @@ namespace MadAgent.UnityMCP.Editor.Tools
     /// <summary>
     /// Tool for applying text edits to Unity C# scripts: replace text, methods, insert, add using.
     /// </summary>
-    [McpForUnityTool("script_apply_edits", Group = "core",
-        Description = "Apply text edits to Unity C# scripts: replace text, replace method bodies, insert code after methods, add using statements.")]
+    [McpForUnityTool("script_apply_edits", group = "core",
+        description = "Apply text edits to Unity C# scripts: replace text, replace method bodies, insert code after methods, add using statements.")]
     public static class ApplyScriptEdits
     {
         public static object HandleCommand(JObject @params)

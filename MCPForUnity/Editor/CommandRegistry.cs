@@ -38,6 +38,35 @@ namespace MadAgent.UnityMCP.Editor
             return token?.Type == JTokenType.String ? token.Value<string>() : defaultValue;
         }
 
+        public string GetString(string key, int defaultValue)
+        {
+            var token = _params?[key];
+            if (token == null) return defaultValue.ToString();
+            if (token.Type == JTokenType.String) return token.Value<string>();
+            if (token.Type == JTokenType.Integer) return token.Value<int>().ToString();
+            if (token.Type == JTokenType.Float) return token.Value<float>().ToString();
+            if (token.Type == JTokenType.Boolean) return token.Value<bool>().ToString().ToLowerInvariant();
+            return defaultValue.ToString();
+        }
+
+        public string GetString(string key, bool defaultValue)
+        {
+            var token = _params?[key];
+            if (token == null) return defaultValue.ToString().ToLowerInvariant();
+            if (token.Type == JTokenType.String) return token.Value<string>();
+            if (token.Type == JTokenType.Boolean) return token.Value<bool>().ToString().ToLowerInvariant();
+            return defaultValue.ToString().ToLowerInvariant();
+        }
+
+        public string GetString(string key, float defaultValue)
+        {
+            var token = _params?[key];
+            if (token == null) return defaultValue.ToString();
+            if (token.Type == JTokenType.String) return token.Value<string>();
+            if (token.Type == JTokenType.Float || token.Type == JTokenType.Integer) return token.Value<float>().ToString();
+            return defaultValue.ToString();
+        }
+
         /// <summary>Get an optional string, checking multiple key aliases.</summary>
         public string GetString(string key, string altKey, string defaultValue)
         {
@@ -56,6 +85,16 @@ namespace MadAgent.UnityMCP.Editor
             return null;
         }
 
+        public int GetInt(string key, int defaultValue)
+        {
+            return GetInt(key) ?? defaultValue;
+        }
+
+        public int GetInt(string key, string altKey, int defaultValue)
+        {
+            return GetInt(key, altKey) ?? defaultValue;
+        }
+
         /// <summary>Get an optional float parameter.</summary>
         public float? GetFloat(string key)
         {
@@ -64,6 +103,20 @@ namespace MadAgent.UnityMCP.Editor
             if (token.Type == JTokenType.Float || token.Type == JTokenType.Integer) return token.Value<float>();
             if (token.Type == JTokenType.String && float.TryParse(token.Value<string>(), out var v)) return v;
             return null;
+        }
+
+        public float? GetFloat(string key, float? defaultValue)
+        {
+            return GetFloat(key) ?? defaultValue;
+        }
+
+        public float? GetFloat(string key, string altKey, float? defaultValue)
+        {
+            var token = _params?[key] ?? _params?[altKey];
+            if (token == null) return defaultValue;
+            if (token.Type == JTokenType.Float || token.Type == JTokenType.Integer) return token.Value<float>();
+            if (token.Type == JTokenType.String && float.TryParse(token.Value<string>(), out var v)) return v;
+            return defaultValue;
         }
 
         /// <summary>Get an optional bool parameter.</summary>
@@ -87,16 +140,45 @@ namespace MadAgent.UnityMCP.Editor
             return GetBool(key) ?? defaultValue;
         }
 
+        public bool RequireBool(string key)
+        {
+            var value = GetBool(key);
+            if (!value.HasValue)
+                throw new ArgumentException($"Missing required bool parameter: {key}");
+            return value.Value;
+        }
+
+        public float RequireFloat(string key)
+        {
+            var value = GetFloat(key);
+            if (!value.HasValue)
+                throw new ArgumentException($"Missing required float parameter: {key}");
+            return value.Value;
+        }
+
         /// <summary>Get a JArray parameter.</summary>
         public JArray GetArray(string key)
         {
             return _params?[key] as JArray;
         }
 
+        public JArray RequireArray(string key)
+        {
+            var value = GetArray(key);
+            if (value == null)
+                throw new ArgumentException($"Missing required array parameter: {key}");
+            return value;
+        }
+
         /// <summary>Get a JObject parameter.</summary>
         public JObject GetObject(string key)
         {
             return _params?[key] as JObject;
+        }
+
+        public JObject GetJObject(string key)
+        {
+            return GetObject(key);
         }
 
         /// <summary>Get the raw JObject.</summary>
@@ -144,7 +226,7 @@ namespace MadAgent.UnityMCP.Editor
         private static readonly Dictionary<string, ToolHandlerInfo> s_Tools = new Dictionary<string, ToolHandlerInfo>();
         private static bool s_Initialized = false;
 
-        private class ToolHandlerInfo
+        public class ToolHandlerInfo
         {
             public MethodInfo SyncMethod;
             public MethodInfo AsyncMethod;
@@ -183,7 +265,7 @@ namespace MadAgent.UnityMCP.Editor
 
                     var toolName = attr.Name ?? NormalizeToolName(type.Name);
                     var syncMethod = type.GetMethod("HandleCommand", new[] { typeof(JObject) });
-                    var asyncMethod = type.GetMethod("HandleCommand", new[] { typeof(JObject) }, new[] { typeof(bool) });
+                    var asyncMethod = type.GetMethod("HandleCommand", new[] { typeof(JObject), typeof(bool) });
 
                     if (syncMethod == null && asyncMethod == null)
                     {

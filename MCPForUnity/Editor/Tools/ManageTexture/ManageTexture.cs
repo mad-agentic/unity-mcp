@@ -10,8 +10,8 @@ namespace MadAgent.UnityMCP.Editor.Tools
     /// <summary>
     /// Texture management tool supporting create, get, set_pixels, resize, and apply.
     /// </summary>
-    [McpForUnityTool("manage_texture", Group = "core",
-        Description = "Manage Unity Textures: create, get, set pixels, resize, and apply changes to Texture2D assets.")]
+    [McpForUnityTool("manage_texture", group = "core",
+        description = "Manage Unity Textures: create, get, set pixels, resize, and apply changes to Texture2D assets.")]
     public static class ManageTexture
     {
         public static object HandleCommand(JObject @params)
@@ -303,7 +303,7 @@ namespace MadAgent.UnityMCP.Editor.Tools
                 case "BC4": return TextureFormat.BC4;
                 case "BC5": return TextureFormat.BC5;
                 case "BC7": return TextureFormat.BC7;
-                case "ETC2_RGB4": return TextureFormat.ETC2_RGB4;
+                case "ETC2_RGB4": return TextureFormat.ETC2_RGB;
                 case "ETC2_RGBA8": return TextureFormat.ETC2_RGBA8;
                 default: return TextureFormat.RGBA32;
             }

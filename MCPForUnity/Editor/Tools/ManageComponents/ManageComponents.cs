@@ -12,8 +12,8 @@ namespace MadAgent.UnityMCP.Editor.Tools
     /// <summary>
     /// Tool for managing Unity components: add, remove, get, set/get properties, list types.
     /// </summary>
-    [McpForUnityTool("manage_components", Group = "core",
-        Description = "Manage Unity components: add, remove, get info, set/get properties dynamically, list types, check existence.")]
+    [McpForUnityTool("manage_components", group = "core",
+        description = "Manage Unity components: add, remove, get info, set/get properties dynamically, list types, check existence.")]
     public static class ManageComponents
     {
         public static object HandleCommand(JObject @params)

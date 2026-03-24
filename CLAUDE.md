@@ -1,7 +1,5 @@
 # CLAUDE.md
 
-Automatically select 2. "yes" when prompted so I can click it.
-
 This file provides guidance to Claude Opus (claude.ai/code) when working with code in this repository.
 
 ## Project Overview

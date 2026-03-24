@@ -11,8 +11,8 @@ namespace MadAgent.UnityMCP.Editor.Tools
     /// Editor management tool supporting play mode controls (play, pause, stop, step),
     /// play mode state queries, selection management, window focusing, and menu execution.
     /// </summary>
-    [McpForUnityTool("manage_editor", Group = "core",
-        Description = "Manage Unity Editor: play/pause/stop/step, play mode status, get/set selection, focus windows, execute menu items.")]
+    [McpForUnityTool("manage_editor", group = "core",
+        description = "Manage Unity Editor: play/pause/stop/step, play mode status, get/set selection, focus windows, execute menu items.")]
     public static class ManageEditor
     {
         public static object HandleCommand(JObject @params)
@@ -130,7 +130,6 @@ namespace MadAgent.UnityMCP.Editor.Tools
         private static object SetPlayModeToggle(ToolParams p)
         {
             var enabled = p.RequireBool("enabled");
-            EditorApplication.playModeCouldHaveChanged = true;
 
             // Note: The playmode auto-save toggle is a user preference.
             // We report the action was received, though actual toggle requires EditorWindow access.
@@ -288,7 +287,28 @@ namespace MadAgent.UnityMCP.Editor.Tools
         {
             var menuPath = p.RequireString("menu_path");
 
-            if (!UnityEditor.Menu.GetMenuItem(menuPath, false).IsValid())
+            var hasMenu = false;
+            try
+            {
+                var submenus = Unsupported.GetSubmenus("");
+                if (submenus != null)
+                {
+                    foreach (var submenu in submenus)
+                    {
+                        if (string.Equals(submenu, menuPath, StringComparison.OrdinalIgnoreCase))
+                        {
+                            hasMenu = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                hasMenu = true;
+            }
+
+            if (!hasMenu)
             {
                 return new ErrorResponse("MenuItemNotFound",
                     $"Menu item path '{menuPath}' not found. "
@@ -297,7 +317,12 @@ namespace MadAgent.UnityMCP.Editor.Tools
 
             try
             {
-                UnityEditor.Menu.ExecuteFunction(menuPath);
+                var executed = EditorApplication.ExecuteMenuItem(menuPath);
+                if (!executed)
+                {
+                    return new ErrorResponse("MenuExecutionFailed",
+                        $"Failed to execute menu item '{menuPath}'.");
+                }
                 return new SuccessResponse($"Menu item '{menuPath}' executed.", new
                 {
                     menu_path = menuPath

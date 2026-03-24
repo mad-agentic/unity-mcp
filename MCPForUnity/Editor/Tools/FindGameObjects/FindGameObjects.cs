@@ -14,8 +14,8 @@ namespace MadAgent.UnityMCP.Editor.Tools
     /// Search tool that finds GameObjects by name (with wildcard pattern support),
     /// tag, layer, path, component type, or InstanceID. Supports pagination.
     /// </summary>
-    [McpForUnityTool("find_gameobjects", Group = "core",
-        Description = "Find GameObjects by name pattern, tag, layer, path, component, or InstanceID. Supports wildcard patterns and pagination.")]
+    [McpForUnityTool("find_gameobjects", group = "core",
+        description = "Find GameObjects by name pattern, tag, layer, path, component, or InstanceID. Supports wildcard patterns and pagination.")]
     public static class FindGameObjects
     {
         public static object HandleCommand(JObject @params)
@@ -304,7 +304,9 @@ namespace MadAgent.UnityMCP.Editor.Tools
             foreach (var comp in allWithComponent)
             {
                 if (comp == null) continue;
-                var go = comp.gameObject;
+                var component = comp as Component;
+                if (component == null) continue;
+                var go = component.gameObject;
                 if (!sceneSet.Contains(go.scene.handle))
                     continue;
                 if (activeOnly && !go.activeInHierarchy)

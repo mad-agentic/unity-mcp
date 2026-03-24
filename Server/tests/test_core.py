@@ -7,6 +7,8 @@ from core.constants import (
     DEFAULT_TRANSPORT,
     TOOL_GROUP_CORE,
     ALL_TOOL_GROUPS,
+    DEFAULT_TOOL_MATURITY,
+    ALL_TOOL_MATURITY_LEVELS,
 )
 from core.config import Config, get_config, reset_config
 
@@ -29,6 +31,14 @@ class TestConstants:
         assert "vfx" in ALL_TOOL_GROUPS
         assert "animation" in ALL_TOOL_GROUPS
         assert "ui" in ALL_TOOL_GROUPS
+
+    def test_default_tool_maturity(self):
+        assert DEFAULT_TOOL_MATURITY == "core"
+
+    def test_all_tool_maturity_levels(self):
+        assert "core" in ALL_TOOL_MATURITY_LEVELS
+        assert "advanced" in ALL_TOOL_MATURITY_LEVELS
+        assert "experimental" in ALL_TOOL_MATURITY_LEVELS
 
 
 class TestConfig:

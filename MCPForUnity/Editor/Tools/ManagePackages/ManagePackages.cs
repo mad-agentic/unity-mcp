@@ -16,8 +16,8 @@ namespace MadAgent.UnityMCP.Editor.Tools
     /// <summary>
     /// Package manager tool supporting list, install, remove, embed, and list_registry operations.
     /// </summary>
-    [McpForUnityTool("manage_packages", Group = "core",
-        Description = "Manage Unity packages: list installed, install by name/version/Git URL, remove, embed local packages, and search registry.")]
+    [McpForUnityTool("manage_packages", group = "core",
+        description = "Manage Unity packages: list installed, install by name/version/Git URL, remove, embed local packages, and search registry.")]
     public static class ManagePackages
     {
 #if UNITY_2020_3_OR_NEWER
@@ -88,16 +88,14 @@ namespace MadAgent.UnityMCP.Editor.Tools
                             resolved_version = info.resolvedPath != null ? info.version : null,
                             source = info.source.ToString(),
                             is_direct_dependency = info.isDirectDependency,
-                            is_asset_store_package = info.source == UnityEditor.PackageManager.PackageSource.AssetStore,
+                            is_asset_store_package = false,
                             is_embedded = info.source == UnityEditor.PackageManager.PackageSource.Local,
                             is_git = info.source == UnityEditor.PackageManager.PackageSource.Git,
-                            git_url = info.git != null ? info.git.url : null,
+                            git_url = info.git != null ? info.git.ToString() : null,
                             path = info.resolvedPath,
                             description = info.description,
                             author = info.author?.name,
                             homepage = info.author?.url,
-                            unity_version = info.unityVersion,
-                            status = info.status.ToString(),
                         });
                     }
                 }
@@ -482,7 +480,6 @@ namespace MadAgent.UnityMCP.Editor.Tools
                             version = info.version,
                             description = TruncateString(info.description, 200),
                             author = info.author?.name,
-                            unity_version = info.unityVersion,
                         });
                     }
 

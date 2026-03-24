@@ -12,8 +12,8 @@ namespace MadAgent.UnityMCP.Editor.Tools
     /// <summary>
     /// Prefab management tool supporting create, instantiate, unpack, get_info, apply, and revert.
     /// </summary>
-    [McpForUnityTool("manage_prefab", Group = "core",
-        Description = "Manage Unity Prefabs: create, instantiate, unpack, get info, apply overrides, and revert.")]
+    [McpForUnityTool("manage_prefab", group = "core",
+        description = "Manage Unity Prefabs: create, instantiate, unpack, get info, apply overrides, and revert.")]
     public static class ManagePrefab
     {
         public static object HandleCommand(JObject @params)
@@ -178,7 +178,7 @@ namespace MadAgent.UnityMCP.Editor.Tools
 
             try
             {
-                instance = PrefabUtility.InstantiatePrefab(prefab, targetScene);
+                instance = PrefabUtility.InstantiatePrefab(prefab, targetScene) as GameObject;
 
                 if (parentTransform != null)
                 {
@@ -229,7 +229,7 @@ namespace MadAgent.UnityMCP.Editor.Tools
 
             try
             {
-                var prefabPath = PrefabUtility.GetPrefabAssetPathOfLatestInstance(go);
+                var prefabPath = PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(go);
 
                 PrefabUtility.UnpackPrefabInstance(go, PrefabUnpackMode.OutermostRoot, InteractionMode.AutomatedAction);
 
@@ -280,7 +280,7 @@ namespace MadAgent.UnityMCP.Editor.Tools
             }
 
             var assetType = PrefabUtility.GetPrefabAssetType(prefab);
-            var variants = PrefabUtility.GetAssetDefinition(prefab) != null
+            var variants = PrefabUtility.GetCorrespondingObjectFromSource(prefab) != null
                 ? GetPrefabVariants(prefabPath)
                 : new List<object>();
 
@@ -310,7 +310,7 @@ namespace MadAgent.UnityMCP.Editor.Tools
                     $"GameObject '{go.name}' is not a prefab instance.");
             }
 
-            var prefabPath = PrefabUtility.GetPrefabAssetPathOfLatestInstance(go);
+            var prefabPath = PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(go);
             var source = PrefabUtility.GetCorrespondingObjectFromSource(go);
             var hasOverrides = PrefabUtility.HasPrefabInstanceAnyOverrides(go, false);
 

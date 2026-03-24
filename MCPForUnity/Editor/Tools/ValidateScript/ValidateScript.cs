@@ -15,8 +15,8 @@ namespace MadAgent.UnityMCP.Editor.Tools
     /// <summary>
     /// Tool for validating Unity C# scripts: syntax checks, compilation, and error reporting.
     /// </summary>
-    [McpForUnityTool("validate_script", Group = "core",
-        Description = "Validate Unity C# scripts: syntax checks, full compilation, and error/warning reporting.")]
+    [McpForUnityTool("validate_script", group = "core",
+        description = "Validate Unity C# scripts: syntax checks, full compilation, and error/warning reporting.")]
     public static class ValidateScript
     {
         public static object HandleCommand(JObject @params)
@@ -123,20 +123,9 @@ namespace MadAgent.UnityMCP.Editor.Tools
 
                 if (classType == null)
                 {
-                    // Try to compile the script to get errors
-                    var result = CompilationPipeline.CompileScript(
-                        new[] { monoScript },
-                        out var assembly;
-                    );
-
-                    if (result != null && result.Length > 0)
-                    {
-                        hasErrors = true;
-                        foreach (var msg in result)
-                        {
-                            errorsForScript.Add($"{msg.message} (line {msg.line})");
-                        }
-                    }
+                    CompilationPipeline.RequestScriptCompilation();
+                    hasErrors = true;
+                    errorsForScript.Add("Script class could not be resolved. Compilation requested.");
                 }
 
                 compilationResults.Add(new
@@ -178,29 +167,14 @@ namespace MadAgent.UnityMCP.Editor.Tools
 
             try
             {
-                var result = CompilationPipeline.CompileScript(
-                    new[] { monoScript },
-                    out var assemblies
-                );
-
-                if (result != null)
+                CompilationPipeline.RequestScriptCompilation();
+                compilerMessages.Add(new
                 {
-                    foreach (var msg in result)
-                    {
-                        compilerMessages.Add(new
-                        {
-                            type = msg.type.ToString(),
-                            message = msg.message,
-                            line = msg.line,
-                            column = msg.column,
-                        });
-
-                        if (msg.type == CompilerMessageType.Error)
-                            hasErrors = true;
-                        if (msg.type == CompilerMessageType.Warning)
-                            hasWarnings = true;
-                    }
-                }
+                    type = "Info",
+                    message = "Compilation requested. Unity does not support compiling a single script via public API in this editor version.",
+                    line = 0,
+                    column = 0,
+                });
             }
             catch (Exception ex)
             {
@@ -353,8 +327,8 @@ namespace MadAgent.UnityMCP.Editor.Tools
                     warnings.Add(new { line = i + 1, message = "TODO comment found." });
 
                 // Hardcoded string path without Application.dataPath
-                if (Regex.IsMatch(line, @"["'][^""']*[/\\][\w./\\]+["']") && !line.Contains("//"))
-                    warnings.Add(new { line = i + 1, message = "Possible hardcoded path detected." });
+                if (Regex.IsMatch(line, @"[""'](Assets|Resources|StreamingAssets)[/\\][^""']*[""']"))
+                    warnings.Add(new { line = i + 1, message = "Hardcoded asset path found — consider using Application.dataPath or Resources.Load." });
 
                 // Empty Update/LateUpdate without base call
                 if (Regex.IsMatch(line, @"private\s+void\s+Update\s*\(\s*\)\s*\{\s*\}"))

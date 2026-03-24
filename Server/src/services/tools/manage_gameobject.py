@@ -7,7 +7,7 @@ from typing import Annotated, Any, Literal, Optional, Union
 from fastmcp import Context
 
 from services.registry import mcp_for_unity_tool
-from transport.unity_transport import send_with_unity_instance
+from services.tools.utils import execute_tool_with_contract
 
 
 @mcp_for_unity_tool(
@@ -113,5 +113,4 @@ async def manage_gameobject(
     if components_to_add is not None:
         params["components_to_add"] = components_to_add
 
-    result = await send_with_unity_instance(None, "manage_gameobject", params)
-    return result
+    return await execute_tool_with_contract("manage_gameobject", params)

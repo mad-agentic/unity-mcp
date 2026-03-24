@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEditor;
+using SceneManagement = UnityEngine.SceneManagement;
 
 namespace MadAgent.UnityMCP.Editor.Tools
 {
@@ -49,9 +50,9 @@ namespace MadAgent.UnityMCP.Editor.Tools
             if (string.IsNullOrEmpty(path) || !path.Contains("/"))
                 return null;
 
-            var scenes = SceneManagement.SceneManager.scenes;
-            foreach (var scene in scenes)
+            for (int i = 0; i < SceneManagement.SceneManager.sceneCount; i++)
             {
+                var scene = SceneManagement.SceneManager.GetSceneAt(i);
                 if (restrictToScene.HasValue && scene != restrictToScene.Value)
                     continue;
 
@@ -313,8 +314,7 @@ namespace MadAgent.UnityMCP.Editor.Tools
 
             if (restrictToScene.HasValue)
             {
-                var objects = SceneManagement.SceneManager.GetSceneByHandle(restrictToScene.Value.handle)
-                    .GetRootGameObjects();
+                var objects = restrictToScene.Value.GetRootGameObjects();
                 foreach (var obj in objects)
                 {
                     CollectWithComponent(obj, results);
@@ -328,7 +328,7 @@ namespace MadAgent.UnityMCP.Editor.Tools
                     if (comp != null && comp.gameObject != null)
                     {
                         // Skip prefab objects that are not in a scene
-                        if (string.IsNullOrEmpty(comp.gameObject.scene.name) &&
+                        if (!string.IsNullOrEmpty(comp.gameObject.scene.name) &&
                             !EditorUtility.IsPersistent(comp.gameObject))
                         {
                             results.Add(comp.gameObject);

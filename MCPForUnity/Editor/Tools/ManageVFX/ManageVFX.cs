@@ -11,8 +11,8 @@ namespace MadAgent.UnityMCP.Editor.Tools
     /// Visual Effects (VFX) and particle system management tool supporting
     /// create_particle, get_particle_settings, set_parameter, and emit.
     /// </summary>
-    [McpForUnityTool("manage_vfx", Group = "vfx",
-        Description = "Create and manage Unity Visual Effects and particle systems: create emitters, configure parameters, emit bursts.")]
+    [McpForUnityTool("manage_vfx", group = "vfx",
+        description = "Create and manage Unity Visual Effects and particle systems: create emitters, configure parameters, emit bursts.")]
     public static class ManageVFX
     {
         public static object HandleCommand(JObject @params)
@@ -239,19 +239,23 @@ namespace MadAgent.UnityMCP.Editor.Tools
             {
                 if (emissionRate.HasValue)
                 {
-                    ps.emission.rateOverTime = emissionRate.Value;
+                    var emission = ps.emission;
+                    emission.rateOverTime = emissionRate.Value;
                 }
                 if (lifetime.HasValue)
                 {
-                    ps.main.startLifetime = lifetime.Value;
+                    var main = ps.main;
+                    main.startLifetime = lifetime.Value;
                 }
                 if (speed.HasValue)
                 {
-                    ps.main.startSpeed = speed.Value;
+                    var main = ps.main;
+                    main.startSpeed = speed.Value;
                 }
                 if (size.HasValue)
                 {
-                    ps.main.startSize = size.Value;
+                    var main = ps.main;
+                    main.startSize = size.Value;
                 }
                 if (colorArray != null && colorArray.Count >= 3)
                 {
@@ -259,11 +263,13 @@ namespace MadAgent.UnityMCP.Editor.Tools
                     float g = colorArray[1].Value<float>();
                     float b = colorArray[2].Value<float>();
                     float a = colorArray.Count >= 4 ? colorArray[3].Value<float>() : 1.0f;
-                    ps.main.startColor = new Color(r, g, b, a);
+                    var main = ps.main;
+                    main.startColor = new Color(r, g, b, a);
                 }
                 if (gravityModifier.HasValue)
                 {
-                    ps.main.gravityModifier = gravityModifier.Value;
+                    var main = ps.main;
+                    main.gravityModifier = gravityModifier.Value;
                 }
 
                 return new SuccessResponse($"Parameters updated for '{go.name}'.", new
@@ -363,11 +369,11 @@ namespace MadAgent.UnityMCP.Editor.Tools
 
         private static object GetColorOverLifetimeInfo(ParticleSystem.ColorOverLifetimeModule col)
         {
-            if (!col.enabled || col.color.minColor == null) return null;
+            if (!col.enabled) return null;
             return new
             {
-                min = ColorToArray(col.color.minColor),
-                max = ColorToArray(col.color.maxColor),
+                mode = col.color.mode.ToString(),
+                color = ColorToArray(col.color.color),
             };
         }
     }

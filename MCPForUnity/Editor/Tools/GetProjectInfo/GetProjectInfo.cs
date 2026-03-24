@@ -12,8 +12,8 @@ namespace MadAgent.UnityMCP.Editor.Tools
     /// Returns project information including project name, path, Unity version,
     /// build target, scene list, tags/layers, and asset GUIDs (with pagination).
     /// </summary>
-    [McpForUnityTool("get_project_info", Group = "core",
-        Description = "Get information about the Unity project: name, path, Unity version, build target, scenes, tags, layers, and asset GUIDs.")]
+    [McpForUnityTool("get_project_info", group = "core",
+        description = "Get information about the Unity project: name, path, Unity version, build target, scenes, tags, layers, and asset GUIDs.")]
     public static class GetProjectInfo
     {
         public static object HandleCommand(JObject @params)
@@ -45,7 +45,7 @@ namespace MadAgent.UnityMCP.Editor.Tools
                     ["editor"] = new
                     {
                         is_playing = Application.isPlaying,
-                        is_paused = Application.isPaused,
+                        is_paused = EditorApplication.isPaused,
                         build_target = EditorUserBuildSettings.activeBuildTarget.ToString(),
                         build_target_group = EditorUserBuildSettings.selectedBuildTargetGroup.ToString(),
                     },

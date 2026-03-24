@@ -12,8 +12,8 @@ namespace MadAgent.UnityMCP.Editor.Tools
     /// Full GameObject CRUD tool supporting create, delete, rename, duplicate,
     /// get, set_transform, set_parent, set_tag, set_layer, find, and list.
     /// </summary>
-    [McpForUnityTool("manage_gameobject", Group = "core",
-        Description = "Manage GameObjects: create, delete, rename, duplicate, get info, set transform/parent/tag/layer, find, and list root objects.")]
+    [McpForUnityTool("manage_gameobject", group = "core",
+        description = "Manage GameObjects: create, delete, rename, duplicate, get info, set transform/parent/tag/layer, find, and list root objects.")]
     public static class ManageGameObject
     {
         public static object HandleCommand(JObject @params)

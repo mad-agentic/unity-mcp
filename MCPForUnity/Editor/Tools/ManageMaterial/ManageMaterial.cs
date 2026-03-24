@@ -11,8 +11,8 @@ namespace MadAgent.UnityMCP.Editor.Tools
     /// Material management tool supporting create, get, set_color, set_texture,
     /// set_shader, set_float, set_vector, set_keyword, duplicate, and delete.
     /// </summary>
-    [McpForUnityTool("manage_material", Group = "core",
-        Description = "Manage Unity Materials: create, get, set color/texture/shader/float/vector/keyword, duplicate, and delete.")]
+    [McpForUnityTool("manage_material", group = "core",
+        description = "Manage Unity Materials: create, get, set color/texture/shader/float/vector/keyword, duplicate, and delete.")]
     public static class ManageMaterial
     {
         public static object HandleCommand(JObject @params)
@@ -219,8 +219,21 @@ namespace MadAgent.UnityMCP.Editor.Tools
                 return new ErrorResponse("MaterialNotFound", "No material found. Provide 'target' (path or instance ID) or 'name'.");
 
             var propertyName = p.RequireString("property_name");
-            var vec = ParseVector(p.GetArray("property_value") ?? p.GetObject("property_value") as JArray);
-            if (vec == null)
+            var vecArray = p.GetArray("property_value");
+            var vecObject = p.GetObject("property_value");
+            var hasVector = false;
+            var vec = Vector4.zero;
+            if (vecArray != null)
+            {
+                vec = ParseVector(vecArray);
+                hasVector = true;
+            }
+            else if (vecObject != null)
+            {
+                vec = ParseVector(vecObject);
+                hasVector = true;
+            }
+            if (!hasVector)
                 return new ErrorResponse("InvalidParameters", "property_value is required for set_vector as [x,y,z,w] or {x,y,z,w}.");
 
             mat.SetVector(propertyName, vec);
@@ -372,6 +385,16 @@ namespace MadAgent.UnityMCP.Editor.Tools
             float y = array.Count > 1 ? array[1].Value<float>() : 0f;
             float z = array.Count > 2 ? array[2].Value<float>() : 0f;
             float w = array.Count > 3 ? array[3].Value<float>() : 0f;
+            return new Vector4(x, y, z, w);
+        }
+
+        private static Vector4 ParseVector(JObject obj)
+        {
+            if (obj == null) return Vector4.zero;
+            float x = obj["x"]?.Value<float>() ?? 0f;
+            float y = obj["y"]?.Value<float>() ?? 0f;
+            float z = obj["z"]?.Value<float>() ?? 0f;
+            float w = obj["w"]?.Value<float>() ?? 0f;
             return new Vector4(x, y, z, w);
         }
 

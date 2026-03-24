@@ -5,6 +5,7 @@ using Newtonsoft.Json.Linq;
 using UnityEngine;
 using UnityEditor;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace MadAgent.UnityMCP.Editor.Tools
 {
@@ -12,8 +13,8 @@ namespace MadAgent.UnityMCP.Editor.Tools
     /// Asset database refresh and script recompilation tool.
     /// Supports long-running async operations with EditorApplication.update polling.
     /// </summary>
-    [McpForUnityTool("refresh_unity", Group = "core",
-        Description = "Refresh Unity asset database, recompile scripts, and refresh import settings. Supports async long-running operations.")]
+    [McpForUnityTool("refresh_unity", group = "core",
+        description = "Refresh Unity asset database, recompile scripts, and refresh import settings. Supports async long-running operations.")]
     public static class RefreshUnity
     {
         private static string _currentOperation = "";
