@@ -93,6 +93,7 @@ async def _run_http(mcp: FastMCP) -> None:
     logger.info(f"Starting Unity MCP server in HTTP mode on {cfg.http_host}:{cfg.http_port}")
 
     from fastapi import FastAPI, WebSocket
+    from starlette.routing import WebSocketRoute
     import uvicorn
 
     # Get FastMCP's native ASGI app — handles full MCP protocol (initialize, tools/list, tools/call, etc.)
@@ -104,10 +105,13 @@ async def _run_http(mcp: FastMCP) -> None:
     # Unity WebSocket hub — Unity editor connects here and listens for commands
     hub = get_plugin_hub()
 
-    @app.websocket("/hub/plugin")
     async def websocket_hub(websocket: WebSocket):
+        logger.info("Incoming websocket request: /hub/plugin")
         await websocket.accept()
+        logger.info("Accepted websocket request: /hub/plugin")
         await hub.handle_connection(websocket)
+
+    app.router.routes.append(WebSocketRoute("/hub/plugin", websocket_hub))
 
     # Health check
     @app.get("/health")
@@ -117,11 +121,26 @@ async def _run_http(mcp: FastMCP) -> None:
     # Mount FastMCP at /mcp — VS Code Copilot and other MCP clients connect here
     app.mount("/mcp", mcp_asgi)
 
+    try:
+        route_dump: list[str] = []
+        for route in app.routes:
+            path = getattr(route, "path", "<no-path>")
+            name = getattr(route, "name", route.__class__.__name__)
+            route_dump.append(f"{route.__class__.__name__}:{path}:{name}")
+        logger.info("HTTP app routes: %s", " | ".join(route_dump))
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("Failed to dump route table: %s", exc)
+
+    for route in app.routes:
+        route_path = getattr(route, "path", "<unknown>")
+        route_name = getattr(route, "name", "<unnamed>")
+        logger.info("Route registered: %s (%s)", route_path, route_name)
+
     config = uvicorn.Config(
         app,
         host=cfg.http_host,
         port=cfg.http_port,
-        log_level="info",
+        log_level="debug",
     )
     server = uvicorn.Server(config)
     await server.serve()
